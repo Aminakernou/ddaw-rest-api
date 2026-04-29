@@ -20,6 +20,6 @@ class User(Base):
         uselist=False,
         cascade="all, delete"
     )
-
-    # Relation One-to-Many avec Emprunt (sera fait par membre 3)
-    emprunts = relationship("Emprunt", back_populates="user")
+    
+    # Relation One-to-Many avec Comment
+    comments = relationship("Comment", back_populates="user")
