@@ -92,4 +92,4 @@ def update_user(user_id: int, updated: UserUpdate, db: Session = Depends(get_db)
     return user
 
 
-# DELETE /users/{id} →
+
