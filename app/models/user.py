@@ -21,5 +21,4 @@ class User(Base):
         cascade="all, delete"
     )
     
-    # Relation One-to-Many avec Comment
-    comments = relationship("Comment", back_populates="user")
+

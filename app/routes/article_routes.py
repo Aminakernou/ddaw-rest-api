@@ -5,7 +5,7 @@ from app.models.article import Article
 from pydantic import BaseModel
 
 
-router = APIRouter(prefix="/articles", tags=["Articles"])
+router = APIRouter(tags=["Articles"])
 
 
 class ArticleCreate(BaseModel):

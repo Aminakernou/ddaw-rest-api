@@ -32,7 +32,7 @@ class ProfileUpdate(BaseModel):
     phone: Optional[str] = None
     adresse: Optional[str] = None
     avatar: Optional[str] = None
-─
+
 # Routes USERS
 
 
@@ -92,6 +92,60 @@ def update_user(user_id: int, updated: UserUpdate, db: Session = Depends(get_db)
     db.commit()
     db.refresh(user)
     return user
+# POST /users/{id}/profile → créer le profil
+@router.post("/{user_id}/profile", status_code=201)
+def create_profile(user_id: int, profile: ProfileCreate, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+    if user.profile:
+        raise HTTPException(status_code=400, detail="Ce user a déjà un profil")
+    new_profile = UserProfile(
+        bio=profile.bio,
+        phone=profile.phone,
+        adresse=profile.adresse,
+        avatar=profile.avatar,
+        user_id=user_id
+    )
+    db.add(new_profile)
+    db.commit()
+    db.refresh(new_profile)
+    return new_profile
 
+# GET /users/{id}/profile → voir le profil
+@router.get("/{user_id}/profile")
+def get_profile(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+    if not user.profile:
+        raise HTTPException(status_code=404, detail="Pas de profil pour ce user")
+    return user.profile
+
+# PUT /users/{id}/profile → modifier le profil
+@router.put("/{user_id}/profile")
+def update_profile(user_id: int, updated: ProfileUpdate, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+    if not user.profile:
+        raise HTTPException(status_code=404, detail="Pas de profil pour ce user")
+    user.profile.bio = updated.bio
+    user.profile.phone = updated.phone
+    user.profile.adresse = updated.adresse
+    user.profile.avatar = updated.avatar
+    db.commit()
+    db.refresh(user.profile)
+    return user.profile
+
+# DELETE /users/{id} → supprimer un utilisateur
+@router.delete("/{user_id}")
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+    db.delete(user)
+    db.commit()
+    return {"message": f"Utilisateur {user_id} supprimé"}
 
 
