@@ -5,7 +5,7 @@ from app.database import get_db
 from app.models.user import User
 from app.models.profile import UserProfile
 from pydantic import BaseModel, EmailStr
-
+import bcrypt
 router = APIRouter()
 
 
@@ -60,14 +60,14 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     if existing:
         raise HTTPException(status_code=400, detail="Email déjà utilisé")
 
-hashed = bcrypt.hashpw(user.password.encode("utf-8"), bcrypt.gensalt())
+    hashed = bcrypt.hashpw(user.password.encode("utf-8"), bcrypt.gensalt())
 
-new_user = User(
-    name=user.name,
-    email=user.email,
-    password=hashed.decode("utf-8"),
-    role=user.role
-)
+    new_user = User(
+        name=user.name,
+        email=user.email,
+        password=hashed.decode("utf-8"),
+        role=user.role
+    )
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
