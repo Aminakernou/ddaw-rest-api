@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from app.database import Base, engine
 
-# Import des modèles (important)
+# Import des modèles 
 from app.models.user import User
 from app.models.profile import UserProfile
 from app.models.article import Article
@@ -14,7 +14,7 @@ from app.routes import article_routes
 from app.routes import category_routes
 from app.routes import comment_routes
 
-# Création des tables APRÈS import des modèles
+# Création des tables 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="DDAW REST API")
