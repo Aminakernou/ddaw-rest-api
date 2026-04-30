@@ -15,7 +15,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(title="DDAW REST API")
 
 app.include_router(user_routes.router, prefix="/users", tags=["Users"])
-app.include_router(article_routes.router) 
+app.include_router(article_routes.router, prefix="/articles", tags=["Articles"])
 app.include_router(category_routes.router)  
 app.include_router(comment_routes.router)   
 

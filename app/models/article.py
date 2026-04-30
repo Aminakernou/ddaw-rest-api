@@ -1,6 +1,12 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from app.database import Base
+article_category = Table(
+    "article_category",
+    Base.metadata,
+    Column("article_id", Integer, ForeignKey("articles.id")),
+    Column("category_id", Integer, ForeignKey("categories.id"))
+)
 class Article(Base):
     __tablename__ = "articles"
 
@@ -12,12 +18,7 @@ class Article(Base):
     # clé étrangère vers User
     auteur_id = Column(Integer, ForeignKey("users.id"))
     author = relationship("User", backref="articles")
-    article_category = Table(
-    "article_category",
-    Base.metadata,
-    Column("article_id", Integer, ForeignKey("articles.id")),
-    Column("category_id", Integer, ForeignKey("categories.id"))
-)
+
     categories = relationship(
     "Category",
     secondary=article_category,
