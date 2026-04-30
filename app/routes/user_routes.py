@@ -8,9 +8,7 @@ from pydantic import BaseModel, EmailStr
 
 router = APIRouter()
 
-# ─────────────────────────────────────────
-# Schémas Pydantic (validation des données)
-# ─────────────────────────────────────────
+
 
 class UserCreate(BaseModel):
     name: str
@@ -34,11 +32,9 @@ class ProfileUpdate(BaseModel):
     phone: Optional[str] = None
     adresse: Optional[str] = None
     avatar: Optional[str] = None
-
-
-# ─────────────────────────────────────────
+─
 # Routes USERS
-# ─────────────────────────────────────────
+
 
 # GET /users → liste tous les utilisateurs
 @router.get("/")
@@ -67,7 +63,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     new_user = User(
         name=user.name,
         email=user.email,
-        password=user.password,  # à hasher dans un vrai projet
+        password=user.password,  
         role=user.role
     )
     db.add(new_user)
