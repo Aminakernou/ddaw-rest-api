@@ -12,7 +12,7 @@ class UserProfile(Base):
     avatar = Column(String(255), nullable=True)   
 
     # Clé étrangère vers users
-    # unique=True → garantit le One-to-One 
+  
     user_id = Column(Integer, ForeignKey("users.id"), unique=True, nullable=False)
 
     # Relation inverse pour accéder au user depuis le profil
